@@ -1,0 +1,31 @@
+#include <QCoreApplication>
+#include<QTcpSocket>
+#include<QBuffer>
+#include<QDebug>
+#include<iostream>
+using namespace std;
+#include "clientprotocol.h"
+#include "clientprotocolimpl.h"
+#include "rpc.h"
+const char EMPTY[] = {'\0'};
+
+int main(int argc, char *argv[])
+{
+  QCoreApplication a(argc, argv);
+  ClientProtocol* protocol = RPC::getProxy();
+  protocol->create("/tmp",
+                                    FsPermission(FsPermission::ALL,FsPermission::ALL,FsPermission::ALL),
+                                    "",
+                                    true,
+                                    true,
+                                    1,
+                                    64 * 1024
+                                  );
+
+  delete protocol;
+  protocol = NULL;
+  return 0;
+}
+
+
+
