@@ -2,19 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3c3c49c5-11a0-440a-8b28-43c7f36195b5" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/com/jpmorgan/endpoint/GatewayMock.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/Pool.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/Resource.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/ResourceError.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/ResourceImpl.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/ResourceManager.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/com/jpmorgan/manager/ResourceManagerTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/ResourcePool.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/com/jpmorgan/manager/ResourcePoolTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/ResourceWorker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com/jpmorgan/endpoint/GatewayTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/jpmorgan/endpoint/GatewayTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/Pool.java" afterPath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/Pool.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/Resource.java" afterPath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/Resource.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/ResourceError.java" afterPath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/ResourceError.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/ResourcePool.java" afterPath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/ResourcePool.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/ResourceWorker.java" afterPath="$PROJECT_DIR$/src/main/java/com/jpmorgan/manager/ResourceWorker.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ResourceScheduler.iws" />
@@ -762,6 +754,11 @@
       <created>1428428327856</created>
       <updated>1428428327856</updated>
     </task>
+    <task id="LOCAL-00001" summary="add resource pool manager">
+      <created>1428610811072</created>
+      <updated>1428610811072</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -833,6 +830,8 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
+    <MESSAGE value="add resource pool manager" />
+    <option name="LAST_COMMIT_MESSAGE" value="add resource pool manager" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
