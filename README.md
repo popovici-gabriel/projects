@@ -8,6 +8,6 @@
 # - eHealth card; Presentation file @ electronic-health-card/Popovici Gabriel Sorin Accenture 18 January 2008.ppt using JavaCard v2.2.x   
 # - battleship quiz 
 # - c++ client for Hadoop 1.x 
-# resource Schedulder 
+# - AM CCA Resource Schedulder under ResourceScheduler folder
 
 # Public audience 
