@@ -5,7 +5,7 @@
 # Education files under profile/Education
 
 # Following projects 
-# - eHealth card 
+# - eHealth card; Presentation file @ electronic-health-card/Popovici Gabriel Sorin Accenture 18 January 2008.ppt using JavaCard v2.2.x   
 # - battleship quiz 
 # - c++ client for Hadoop 1.x 
 # resource Schedulder 
