@@ -33,15 +33,4 @@ public class GatewayTest {
     public void shouldSendError() {
         this.gateway.send(null);
     }
-
-
-    private static class GatewayMock implements Gateway {
-
-        @Override
-        public void send(Message message) {
-            if (message == null)
-                throw new IllegalArgumentException("Message should not be null");
-            message.completed();
-        }
-    }
 }
