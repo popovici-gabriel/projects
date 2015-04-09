@@ -1,6 +1,7 @@
 # projects
 
 # Gabriel Popovici popovici.gabriel@gmail.com
+# Linkedin https://www.linkedin.com/profile/preview?vpa=pub&locale=
 # Resume under folder profile 
 # Education files under profile/Education
 
