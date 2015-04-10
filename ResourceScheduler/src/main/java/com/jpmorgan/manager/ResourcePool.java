@@ -2,19 +2,25 @@ package com.jpmorgan.manager;
 
 
 import java.util.Iterator;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Follows the Object pool pattern that uses a set of initialized Resources in a "pool"
- * rather that allocating and destroyin on demand.
+ * rather that allocating and destroying on demand. <br/>
+ * The pool pattern is using regular FIFO mechanism represented by a Blocked Queue.
+ * A blocking queue adds support operation for wait queue to become non-empty when borrow object is summoned.
  *
  * @param <R> Resource
  * @see http://en.wikipedia.org/wiki/Object_pool_pattern
  */
 public abstract class ResourcePool<R extends Resource> implements Pool<R> {
 
-    private Queue<R> pool;
+    private final static Logger LOGGER = Logger.getLogger(ResourcePool.class.getName());
+
+    private BlockingQueue<R> pool;
 
     private Integer minIdle;
 
@@ -33,9 +39,12 @@ public abstract class ResourcePool<R extends Resource> implements Pool<R> {
 
 
     public R borrowResource() {
-        R resource = this.pool.poll();
-        if (resource == null) {
-            resource = createResource();
+        R resource = null;
+        try {
+            resource = this.pool.take();
+        } catch (InterruptedException e) {
+            LOGGER.log(Level.SEVERE, "Pool Error", e);
+            e.printStackTrace();
         }
         return resource;
     }
@@ -44,7 +53,12 @@ public abstract class ResourcePool<R extends Resource> implements Pool<R> {
         if (resource == null) {
             throw new IllegalStateException("The resource has been disposed at this point we cannot added back to the pool");
         }
-        this.pool.offer(resource);
+        try {
+            this.pool.put(resource);
+        } catch (InterruptedException e) {
+            LOGGER.log(Level.SEVERE, "Pool Error", e);
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -61,6 +75,7 @@ public abstract class ResourcePool<R extends Resource> implements Pool<R> {
         Iterator<R> iterator = pool.iterator();
         while (iterator.hasNext()) {
             R resource = iterator.next();
+            awaitTermination(resource);
             resource.dispose();
             iterator.remove();
         }
@@ -76,8 +91,16 @@ public abstract class ResourcePool<R extends Resource> implements Pool<R> {
     }
 
     private void initialize(final int minIdle) {
-        this.pool = new ConcurrentLinkedQueue<R>();
+        this.pool = new LinkedBlockingQueue<>();
         for (int i = 0; i < minIdle; ++i)
             pool.add(createResource());
+    }
+
+    private void awaitTermination(R resource) {
+        LOGGER.log(Level.INFO, "About to check if Resource is available for disposal");
+        while (!resource.isAvailable()) {
+            LOGGER.log(Level.INFO, "Resource is not available yet");
+        }
+        LOGGER.log(Level.INFO, "Resource is available for disposal");
     }
 }

@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,21 +16,21 @@ public class ResourceImpl extends Resource {
 
     private static final Logger LOGGER = Logger.getLogger(ResourceImpl.class.getName());
 
-    private volatile boolean available;
+    private AtomicBoolean available;
 
-    private volatile boolean disposed;
+    private AtomicBoolean disposed;
 
     public ResourceImpl(String name) {
         super(name);
-        this.available = true;
-        this.disposed = false;
+        this.available = new AtomicBoolean(true);
+        this.disposed = new AtomicBoolean(false);
     }
 
     @Override
     public void sendMessage(final Message message, final Gateway gateway) throws ResourceError {
         final ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<?> result = executor.submit(setupWorker(message, gateway));
-        this.available = false;
+        this.available.set(false);
         try {
             result.get();
         } catch (InterruptedException e) {
@@ -39,13 +40,13 @@ public class ResourceImpl extends Resource {
             LOGGER.log(Level.SEVERE, "Resource Error", e);
             throw new ResourceError("Resource Error", e);
         } finally {
-            this.available = true;
+            this.available.set(true);
         }
     }
 
     @Override
     public boolean isAvailable() {
-        return available;
+        return available.get();
     }
 
     @Override
@@ -55,12 +56,12 @@ public class ResourceImpl extends Resource {
 
     @Override
     protected void dispose() throws ResourceError {
-        disposed = true;
+        disposed.set(true);
     }
 
     @Override
     public boolean isDisposed() {
-        return disposed;
+        return disposed.get();
     }
 
     private ResourceWorker setupWorker(Message message, Gateway gateway) {
