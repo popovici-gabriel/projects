@@ -9,7 +9,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Date;
 import java.util.UUID;
 
 public class ResourceManagerTest {
@@ -42,7 +41,7 @@ public class ResourceManagerTest {
         manager = new ResourceManager(pool);
         gateway = new GatewayMock();
         group = new Group<>(GROUP1);
-        message = new MessageImpl<>(M_1, null, new Date(), group);
+        message = new MessageImpl(1l, null, group);
     }
 
     @After

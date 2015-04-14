@@ -74,4 +74,12 @@ public abstract class MessageSequence<ID, P> implements Message, Serializable {
         return id.hashCode();
     }
 
+    /**
+     * Checks whether or not this is the end of message.
+     *
+     * @return status of message
+     */
+    public boolean isEndOfMessage() {
+        return endOfMessage;
+    }
 }

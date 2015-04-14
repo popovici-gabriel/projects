@@ -15,7 +15,7 @@ public class MessageTest {
     @Before
     public void setup() {
         G1 = new Group<>("G1");
-        message = new MessageImpl<>("M1", "DATA", new Date(), G1);
+        message = new MessageImpl(1l, "DATA", G1);
     }
 
     @Test

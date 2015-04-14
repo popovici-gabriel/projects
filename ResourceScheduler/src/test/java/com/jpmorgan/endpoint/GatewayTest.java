@@ -2,11 +2,10 @@ package com.jpmorgan.endpoint;
 
 import com.jpmorgan.model.Group;
 import com.jpmorgan.model.MessageImpl;
+import com.jpmorgan.model.MessageSequence;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Date;
 
 public class GatewayTest {
 
@@ -22,7 +21,7 @@ public class GatewayTest {
     @Test
     public void shouldSendMessage() {
         //arrange
-        MessageImpl<String, String> message = new MessageImpl<>("ONE", "Hello World !", new Date(), G1);
+        MessageSequence<Long, String> message = new MessageImpl(1l, "Hello World !", G1);
         //act
         this.gateway.send(message);
         //assert
