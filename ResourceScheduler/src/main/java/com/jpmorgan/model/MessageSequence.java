@@ -82,4 +82,22 @@ public abstract class MessageSequence<ID, P> implements Message, Serializable {
     public boolean isEndOfMessage() {
         return endOfMessage;
     }
+
+    /**
+     * Get sequence ID
+     *
+     * @return ID
+     */
+    public ID getId() {
+        return id;
+    }
+
+    /**
+     * Get group
+     *
+     * @return Group
+     */
+    public Group<ID> getGroup() {
+        return group;
+    }
 }

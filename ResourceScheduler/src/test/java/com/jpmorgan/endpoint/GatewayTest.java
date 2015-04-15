@@ -21,7 +21,7 @@ public class GatewayTest {
     @Test
     public void shouldSendMessage() {
         //arrange
-        MessageSequence<Long, String> message = new MessageImpl(1l, "Hello World !", G1);
+        MessageSequence<String, String> message = new MessageImpl("m1", "Hello World !", G1);
         //act
         this.gateway.send(message);
         //assert

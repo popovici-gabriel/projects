@@ -41,7 +41,7 @@ public class ResourceManagerTest {
         manager = new ResourceManager(pool);
         gateway = new GatewayMock();
         group = new Group<>(GROUP1);
-        message = new MessageImpl(1l, null, group);
+        message = new MessageImpl("m1", null, group);
     }
 
     @After

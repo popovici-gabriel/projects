@@ -2,6 +2,7 @@ package com.jpmorgan.manager;
 
 
 import java.util.Iterator;
+import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
@@ -35,6 +36,15 @@ public abstract class ResourcePool<R extends Resource> implements Pool<R> {
         this.minIdle = minIdle;
 
         initialize(minIdle);
+    }
+
+    public static ResourcePool singleResourcePool() {
+        return new ResourcePool<ResourceImpl>(1) {
+            @Override
+            public ResourceImpl createResource() {
+                return new ResourceImpl(UUID.randomUUID().toString());
+            }
+        };
     }
 
 

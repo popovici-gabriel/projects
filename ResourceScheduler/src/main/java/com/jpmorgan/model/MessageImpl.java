@@ -1,18 +1,20 @@
 package com.jpmorgan.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class MessageImpl extends MessageSequence<Long, String> {
+public class MessageImpl extends MessageSequence<String, String> {
 
     private AtomicBoolean completed;
 
-    public MessageImpl(Long id, String payload, Group group) {
+    public MessageImpl(String id, String payload, Group group) {
         super(id, payload, new Date(), group);
         this.completed = new AtomicBoolean(false);
     }
 
-    public MessageImpl(Long id, String payload, Group group, boolean endOfMessage) {
+    public MessageImpl(String id, String payload, Group group, boolean endOfMessage) {
         this(id, payload, group);
         this.endOfMessage = endOfMessage;
     }
@@ -30,13 +32,23 @@ public class MessageImpl extends MessageSequence<Long, String> {
     /**
      * Create Sequence message.
      *
-     * @param id      sequence ID
-     * @param payload message payload
-     * @param group   owning group
+     * @param group owning group
      * @return MessageImpl
      */
-    public static MessageImpl createSequenceMessage(Long id, String payload, Group group) {
-        return new MessageImpl(id, payload, group);
+    public static MessageImpl[] createSequenceMessage(Group group, int size) {
+        List<MessageImpl> sequence = new ArrayList<>(size);
+        for (int i = 1; i <= size; ++i) {
+            String payload;
+            if (i == 1)
+                payload = MessageType.START_SEQ.toString();
+            else if (i == size)
+                payload = MessageType.STOP_SEQ.toString();
+            else
+                payload = MessageType.BLOCK_SEQ.toString();
+
+            sequence.add(new MessageImpl(String.valueOf(i), payload, group, i == size ? true : false));
+        }
+        return sequence.toArray(new MessageImpl[size]);
     }
 
     /**
@@ -47,8 +59,7 @@ public class MessageImpl extends MessageSequence<Long, String> {
      * @param group   owning group
      * @return MessageImpl
      */
-    public static MessageImpl createSingleMessage(Long id, String payload, Group group) {
+    public static MessageImpl createSingleMessage(String id, String payload, Group group) {
         return new MessageImpl(id, payload, group, false);
     }
-
 }
