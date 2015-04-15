@@ -19,6 +19,7 @@ public abstract class IteratorStrategy<E extends Message> implements Iterator<E>
     /**
      * Returns the next element in the iteration.
      *
+     * @param group Group message
      * @return the next element in the iteration
      * @throws java.util.NoSuchElementException if the iteration has no more elements
      */
