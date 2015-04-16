@@ -1,0 +1,283 @@
+Resource Scheduler Current System
+You are working on a system which uses a single, very expensive, external/3rd party resource to perform some, potentially very time consuming, 
+operations on messages that you send to it. You are supplied with the Gateway and Message interfaces describing how to interact with the external resource:
+send messages to be processed by calling the Gateway's send(Message msg) method: 
+
+public interface Gateway {
+	public void send(Message msg)
+}
+when a Message has completed processing, its completed() method will be called:
+
+public interface Message {
+	public void completed()
+}
+
+
+																	Requirements: 
+
+Task
+The number of these external resources has just been increased to allow more messages to be processed. However, as these resources are very expensive, 
+we want to make sure that they are not idle when messages are waiting to be processed. You should implement a class or classes that:
+
+  	- 	can be configured with the number of resources available
+	-	receives Messages (and queues them up if they cannot be processed yet)
+	- 	as available resources permit (or as they become available), sends the 'correct' message to the Gateway
+
+
+Selecting the right message
+	-	Messages to the Gateway have a logical grouping and several Messages form a "group" (messages have a group ID).
+	-	Messages are not guaranteed to be delivered in their groups. I.E. you might get messages from group2 before you are finished with group1
+	-	Where possible, the message groups should not be interleaved...except where resources are idle and other work can be done.
+	-	The priority in which to process groups is defined by the order in which you receive the first message from the group
+This is captured as a set of behaviors below:
+
+Forwarding
+	-	The class you write must forward Messages via the Gateway interface when resources are available:
+	-	For a single resource, when one message is received, that message is sent to the gateway For two resources, when two messages are received, both messages are sent to the gateway
+Queuing
+	-	When no resources are available, messages should not be sent to the Gateway
+	-	For a single resource, when two messages are received, only the first message is sent to the gateway
+
+Responding
+	-	As messages are completed, if there are queued messages, they should be processed
+	-	Same as the queuing above, but after the first message is completed, the second message is sent to the gateway
+Prioritising
+	-	If there are messages belonging to multiple groups in the queue, as resources become available, we want to prioritise messages from groups already started.
+
+Cancellation
+	-	It should be possible to tell the scheduler that a group of messages has now been cancelled. Once cancelled, 
+		no further messages from that group should sent to the Gateway.
+Alternative Message Prioritisation
+	-	It should be possible to use different Message prioritisation algorithms to select the next Message from the queue. 
+		Invent a new strategy and allow the resource scheduler to be run with this or the original algorithm easily.
+Termination Messages
+	-	When a Termination Message is received, that means that it is the last Message in that group (not all groups have the same number of messages). 
+		If further Messages belonging to that group are received, an error should be raised.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+																Solution 
+
+The object pool pattern is a software creational design pattern that uses a set of initialized objects kept ready to use – a "pool" – rather than allocating 
+The application requires an application resource pool to perform well and adjust to expensive and consuming operations as well as adding aditional extra resources.
+and destroying them on demand. A client of the pool will request an object from the pool and perform operations on the returned object. 
+When the client has finished, it returns the object to the pool rather than destroying it; this can be done manually or automatically.
+Object pools are primarily used for performance: in some circumstances, object pools significantly improve performance. 
+Object pools complicate object lifetime, as objects obtained from and return to a pool are not actually created or destroyed at this time, 
+and thus require care in implementation.
+
+Implementation location under: com.jpmorgan.manager.* 
+
+Interface/contract operations: 
+
+public interface Pool<R> {
+
+    /**
+     * Creates a new resource.
+     *
+     * @return R a new resource
+     */
+    R createResource();
+
+    /**
+     * Gets the next free Resource from the pool. If the pool is empty a new Resource will be
+     * created.
+     *
+     * @return R resource
+     */
+    R borrowResource();
+
+    /**
+     * Returns the resource back to the pool.
+     *
+     * @param resource to be returned to the pool.
+     */
+    void returnResource(R resource);
+
+    /**
+     * Should dispose the pool and the resources.
+     */
+    void shutdown() throws ResourceError; 
+}
+
+Direct implementation is ResourcePool <abstract> acting as a template class and derived concrete implementations under Unit test cases and ResourceManager. 
+The resources are kept in FIFO Queue with aditional blocking state in case the resources are busy. The client call can configure the number of idle resources by speciying 
+a number a minIdle elements during pool constrction. This will take care of alocating a number of resources during pool setup.
+
+public abstract class ResourcePool<R extends Resource> implements Pool<R> {
+
+    private BlockingQueue<R> pool; // FIFO "blocking" queue taking care of "busy" scenario 
+
+    private Integer minIdle;
+
+    /**
+     * Creates the pool with a minimum number of resources residing in the pool.
+     *
+     * @param minIdle
+     */
+    public ResourcePool(Integer minIdle) {
+        if (minIdle == null || minIdle == 0)
+            throw new IllegalArgumentException("Initial size must be a positive integer");
+        this.minIdle = minIdle;
+
+        initialize(minIdle);
+    } 
+
+The resource manager takes care of the pool creation/shutdown options and handling of resources: 
+
+ - The sendMessage method takes care of borrow resource from pool and returning resource to pool when process is DONE. 
+   the borrowResource is a blocking method in case no more resources are available ! 
+
+**
+ * Resource Manager which uses the Object Pool pattern.
+ *
+ * @param <R>
+ * @see com.jpmorgan.manager.ResourcePool
+ */
+public class ResourceManager<R extends Resource> {
+
+
+
+    /**
+     * Send message action using gateway.
+     *
+     * @param message Message
+     * @param gateway Gateway
+     */
+    public void sendMessage(final Message message, final Gateway gateway) {
+        LOGGER.log(Level.INFO, "About to borrow Resource from Pool");
+        R resource = pool.borrowResource(); /
+        try {
+            LOGGER.log(Level.INFO, "About to execute process under resource");
+            resource.sendMessage(message, gateway);
+        } catch (ResourceError resourceError) {
+            LOGGER.log(Level.SEVERE, "Resource Error", resourceError);
+        } finally {
+            LOGGER.log(Level.INFO, "About to return Resource back to pool");
+            pool.returnResource(resource);
+        }
+    }
+------------------------------------------------------------------------------------
+
+ Model data is located in package: com.jpmorgan.model.* 
+
+MessageSequence IS-A Message from the Requirements and uses a Group to identify the group and is implemented with templating in mind: 
+	-	abstract class MessageSequence<ID, P> implements Message, Serializable
+	-	several messages make a Sequence and they have an end of message flag 
+		 /**
+     	  * Checks whether or not this is the end of message.
+     	  *
+     	  * @return status of message
+	      */
+	       public boolean isEndOfMessage() {
+	          return endOfMessage;
+	       }
+For simulating purposes I used a concrete implementation: 
+	-	 MessageImpl extends MessageSequence<String, String> for easiness during TDD 
+
+-----------------------------------------------------------------------------------
+
+	Entry point into the application is the ResourceScheduler concrete class located under com.jpmorgan.scheduler.* 
+
+	public void sendSequence(MessageImpl... messages) throws TerminationMessageError ;
+	public void cancelGroup(Group group)
+
+
+	In case Group is on cancelled Group a message will not be sent to Gateway. 
+	A TerminationMessageError is used to signal end of message error mechanism. 
+
+	The prioritisation algorithm is solved with Producer–consumer problem a classic example of a multi-process synchronization problem. 
+	The problem describes two processes, the producer and the consumer, who share a common, fixed-size buffer used as a queue. 
+	The producers job is to generate a piece of data, put it into the buffer and start again. 
+	At the same time, the consumer is consuming the data one piece at a time. 
+	The problem is to make sure that the producer will not try to add data into the buffer if it is full and that the consumer wont try to remove data from an empty buffer.
+
+	Producer concrete implementation under QueueProducer and consumer under QueueConsumer concrete class files. 
+
+	To solve the prioritisation problem I have used 2 FIFO blocking queues: 
+	 - input deals with cancelled messages and prioritisation algorithms taking care of nextMessage   
+	 - output deals with processing messages; any message filtered by input FIFO queue will be directly send to Gateway through ResourcePool mechanism 
+
+	take() and put() under java.util.BlockingQueue are O(1) thread-safe blocking methods. The client code is using the sendSequence(Message[] array ) to place the messages 
+	into the input queue and the Producer is taking the messages and filtering by Group ID if necessary or cancelling and sending them directly to OUTPUT. 
+	QueueProducer
+	........
+	 while (hasElements()) {
+
+                MessageImpl head = input.take(); // block if no messages are available
+                size.decrementAndGet();
+
+                if (notCancelledGroup(head)) {
+                    LOGGER.log(Level.INFO, "QueueProducer: >> Message sequence: " + head.getId() + " under Group: " + head.getGroupId());
+                    output.put(head); // send to OUTPUT after filtering
+    ...........
+    QueueConsumer
+    ...........
+     while (hasElements()) {
+                MessageImpl message = queue.take(); //  take from producer and process blocking in case queue is empty 
+                LOGGER.log(Level.INFO, "QueueConsumer: << About to send Message sequence: " + message.getId() + " under Group: " + message.getGroupId());
+                resourceManager.sendMessage(message, gateway);
+                LOGGER.log(Level.INFO, "QueueConsumer: << Message Sent sequence: " + message.getId() + " under Group: " + message.getGroupId());
+    ............            
+                        
+----------------------------------------------------------------------------------------
+
+	Prioritisation - the algorithm to select the next Message of the same Group ID as he Head Message 
+	Implementation is located under: com.jpmorgan.priority.* package 
+	Concrete implementation : GroupIteratorStrategy extends IteratorStrategy<MessageImpl> where IteratorStrategy<E extends Message> implements Iterator<E>  
+	The GroupIteratorStrategy IS-A Iterator and has one particular method to select the next Message from collection(FIFO queue): 
+
+	/**
+     * Returns the next element in the iteration.
+     *
+     * @param group Group message
+     * @return the next element in the iteration
+     * @throws java.util.NoSuchElementException if the iteration has no more elements
+     */
+    public abstract E next(Group group);
+
+    The Producer is using the GroupIteratorStrategy to browse/filer for similar Messages with same Group ID: 
+
+    QueueProducer 
+    .........
+
+     Group<String> group = head.getGroup();  // Head Group ID 
+	IteratorStrategy<MessageImpl> strategy = new GroupIteratorStrategy(input.iterator());
+    while (strategy.hasNext()) {
+        MessageImpl message = strategy.next(group);
+        if (strategy.isNotNullObject(message)) {
+            LOGGER.log(Level.INFO, "QueueProducer: >> Message sequence: " + message.getId() + " under Group: " + message.getGroupId());
+            output.put(message);
+            strategy.remove();
+            size.decrementAndGet();
+        }
+    }
+    ...........                
+
+Current solution is dynamically creating such algorithm during queue Producer based on Group ID of the Head. 
+---------------------------------------------------------------------------------------
+
+Project managed with maven and during mvn clean instal several tests are run to show TDD support 
+	-	ResourceManagerTest
+	-	ResourcePoolTest
+	- 	ResourceSchedulerTest
+
+-----------------------------------------------------------------------------------
+
+To execute main test case scenario a simple mvn exec:java is issued on CLI with -ea by default which launches 
+-	com.jpmorgan.App main() method 
+
+ See README.txt for more information building/pre-requisites/exec 
+---------------------
+
+Thank u !  :) 
+
+
+Gabriel Popovici 
+popovici.gabriel@gmail.com 
++40 723 380 384 
+
+
+
+
+
