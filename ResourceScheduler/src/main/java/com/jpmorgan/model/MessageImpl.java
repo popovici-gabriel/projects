@@ -59,7 +59,18 @@ public class MessageImpl extends MessageSequence<String, String> {
      * @param group   owning group
      * @return MessageImpl
      */
-    public static MessageImpl createSingleMessage(String id, String payload, Group group) {
-        return new MessageImpl(id, payload, group, false);
+    public static MessageImpl createSingleMessage(String id, Group group) {
+        return new MessageImpl(id, MessageType.STOP_SEQ.toString(), group, true);
+    }
+
+    /**
+     * Create Single message. The end of message flag will be set to true.
+     *
+     * @param id    sequence ID
+     * @param group owning group
+     * @return MessageImpl
+     */
+    public static MessageImpl createBlockMessage(String id, Group group) {
+        return new MessageImpl(id, MessageType.BLOCK_SEQ.toString(), group, false);
     }
 }

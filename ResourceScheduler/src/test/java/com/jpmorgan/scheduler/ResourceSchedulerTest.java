@@ -42,7 +42,7 @@ public class ResourceSchedulerTest {
 
     @Test
     public void shouldAddSequence() throws TerminationMessageError {
-        scheduler.addSequence(sequence);
+        scheduler.sendSequence(sequence);
         for (int i = 0; i < sequence.length; i++) {
             Assert.assertTrue(sequence[i].isCompleted());
         }

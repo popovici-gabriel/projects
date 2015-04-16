@@ -48,7 +48,7 @@ public class ResourceScheduler {
         this.terminatedGroup = new CopyOnWriteArrayList<>();
     }
 
-    public void addSequence(MessageImpl... messages) throws TerminationMessageError {
+    public void sendSequence(MessageImpl... messages) throws TerminationMessageError {
         latch = new CountDownLatch(2);
         this.input = new ArrayBlockingQueue<>(messages.length);
         this.sequenceSize = messages.length;
@@ -56,6 +56,9 @@ public class ResourceScheduler {
         for (int i = 0; i < messages.length; ++i) {
             addMessage(messages[i], i);
         }
+
+        startProducer();
+
         try {
             latch.await();
         } catch (InterruptedException e) {
@@ -78,7 +81,6 @@ public class ResourceScheduler {
 
         if (message.isEndOfMessage()) {
             terminatedGroup.add(message.getGroup());
-            startProducer();
         }
 
         input.add(message);
@@ -89,7 +91,7 @@ public class ResourceScheduler {
     }
 
     private void startConsumer() {
-        Thread thread = new Thread(new QueueConsumer(output, resourceManager, gateway, sequenceSize,latch));
+        Thread thread = new Thread(new QueueConsumer(output, resourceManager, gateway, sequenceSize, latch));
         thread.start();
     }
 

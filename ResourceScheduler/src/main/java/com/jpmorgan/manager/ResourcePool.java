@@ -89,6 +89,7 @@ public abstract class ResourcePool<R extends Resource> implements Pool<R> {
             resource.dispose();
             iterator.remove();
         }
+        pool = null;
     }
 
     /**

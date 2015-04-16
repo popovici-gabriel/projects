@@ -41,6 +41,7 @@ public class ResourceImpl extends Resource {
             throw new ResourceError("Resource Error", e);
         } finally {
             this.available.set(true);
+            executor.shutdown();
         }
     }
 
