@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jalopy>
+  <general>
+    <compliance>
+      <version>15</version>
+    </compliance>
+    <style>
+      <description>Sun Java Coding Convention</description>
+      <name>Sun</name>
+    </style>
+  </general>
+</jalopy>
