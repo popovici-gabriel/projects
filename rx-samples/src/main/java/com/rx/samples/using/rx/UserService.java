@@ -23,11 +23,4 @@ public interface UserService {
      * @param subscriber {@link rx.Observer} subscriber
      */
     void subsribeToUserEvents(Observer<UserEvent> subscriber);
-
-    /**
-     * Subscribe using a Functional style idiom approach/lambda
-     *
-     * @param onNext
-     */
-    void subscribeToUserEvents(Action1<UserEvent> onNext);
 }

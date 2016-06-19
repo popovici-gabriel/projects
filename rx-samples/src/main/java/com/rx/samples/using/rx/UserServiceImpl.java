@@ -1,7 +1,6 @@
 package com.rx.samples.using.rx;
 
 import rx.Observer;
-import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 
 public class UserServiceImpl implements UserService {
@@ -25,9 +24,5 @@ public class UserServiceImpl implements UserService {
     @Override
     public void subsribeToUserEvents(Observer<UserEvent> subscriber) {
         userEventSubject.subscribe(subscriber);
-    }
-
-    @Override
-    public void subscribeToUserEvents(Action1<UserEvent> onNext) {
     }
 }

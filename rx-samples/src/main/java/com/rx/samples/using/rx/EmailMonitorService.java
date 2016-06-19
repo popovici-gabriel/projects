@@ -30,7 +30,6 @@ public class EmailMonitorService {
                 handleUserEvents(userEvent);
             }
         });
-        userService.subscribeToUserEvents(this::handleUserEvents);
     }
 
 
