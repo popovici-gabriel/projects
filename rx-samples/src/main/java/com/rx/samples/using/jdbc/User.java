@@ -7,7 +7,7 @@ public class User {
     private String username;
 
     public User() {
-
+        super();
     }
 
     public User(long id, String username) {
