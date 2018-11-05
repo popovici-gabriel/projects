@@ -1,0 +1,27 @@
+Create a Microservice that can serve stock prices using restful endpoints and display the
+prices for a given day.
+
+The files are located in resources/data
+Each CSV file corresponds to ONE stock symbol's history per day.
+
+A test spring boot project has been created to speed things up.
+The H2 database is accessible at jdbc:h2:mem:testdb
+The H2 console is started at http://localhost:8080/h2-console
+The table name is STOCKS
+
+Tasks:
+1/ Write a service that imports all the CSV files from resources/data into the STOCKS database.
+    You can use the openCSV library, which has been added to the pom.xml or any alternate solution.
+    This service should execute each time the application is executed.
+    NOTE: You can use Lombok to simplify the entity class although not a requirement.
+
+2/ Create a controller which serves the following Restful properties:
+    a) return a SINGLE stock object using the SYMBOL and DATE supplied (endpoint : /stock/get/SYMBOL/DATE [GET] , e.g.: /stock/AAPL/2017-12-31)
+    b) return list of the stock object for a SYMBOL for ALL dates (endpoint: /stock/get/SYMBOL [GET])
+    c) return ALL stock objects per DATE (endpoint: /stocks/DATE [GET])
+    c) update stock close date of stock object for a given SYMBOL and DATE (endpoint: /stock/update/SYMBOL/DATE [POST])
+
+3/ Create a controller that displays a page with the following:
+    All tickers and their number of quotes, min-max Close prices (using SpringMVC and Thymeleaf)
+
+4/ Write  tests  - try to use TDD
