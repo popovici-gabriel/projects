@@ -6,14 +6,7 @@ Description
 
 PriceBasket should accept a list of items in the basket and output the subtotal, the special offer discounts and the final price.Input should be via the command line in the form <code>PriceBasket item1 item2 item3 … </code>
 
-eg:
-<pre>
- Subtotal: £3.10
- Apples 10% off: -10p
- Total: £3.00
-</pre>
-
-The goods that can be purchased, together with their normal prices are:
+The goods that can be purchased, which are all priced in GBP, are:
 
 - Soup – 65p per tin
 - Bread – 80p per loaf
