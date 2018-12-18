@@ -35,3 +35,19 @@ Subtotal: £1.30
 (No offers available)
 Total price: £1.30
 </pre>
+
+How to Run
+----------
+
+You must have Maven and Java 8 installed and configured. Using Maven:
+<pre>
+mvn clean package
+</pre>
+You can now run the application:
+<pre>
+java -jar target/PriceBasket-0.1-SNAPSHOT.jar Apple Milk Bread
+</pre>
+or pre defined script
+<pre>
+run.sh
+</pre>

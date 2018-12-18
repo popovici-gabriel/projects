@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.price</groupId>
-    <artifactId>price-basket</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>price-basket</name>
-    <description>Price Basket Sample</description>
+    <artifactId>PriceBasket</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <name>PriceBasket</name>
+    <description>Price Basket Solution</description>
     <packaging>jar</packaging>
 
 
