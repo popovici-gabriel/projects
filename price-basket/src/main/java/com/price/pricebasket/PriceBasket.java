@@ -1,6 +1,11 @@
 package com.price.pricebasket;
 
-import lombok.extern.java.Log;
+import com.price.pricebasket.domain.Basket;
+import com.price.pricebasket.domain.Item;
+import com.price.pricebasket.inventory.Inventory;
+import com.price.pricebasket.inventory.ItemIdentifier;
+import com.price.pricebasket.inventory.ProductInventory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,27 +13,31 @@ import java.util.stream.Stream;
 
 import static java.lang.String.format;
 
-@Log
+@Slf4j
 public class PriceBasket {
+
+
     public static void main(String[] args) {
-        final SupplierProduct supplierProduct = loadInventory();
+        final Inventory inventory = getInventory();
+        inventory.loadDefaultInventory();
+
         List<Item> itemList = Stream
                 .of(args)
                 .map(String::toLowerCase)
                 .peek(log::info)
-                .map(ItemType::itemType)
-                .peek(itemType -> log.fine(format("Found item type %s", itemType)))
-                .map(itemType -> supplierProduct.getSupplier(itemType).get())
-                .peek(item -> log.fine(item.toString()))
+                .map(ItemIdentifier::itemIdentifier)
+                .peek(itemType -> log.debug(format("Found item type %s", itemType)))
+                .map(itemType -> inventory.getItem(itemType.identifier()))
+                .peek(item -> log.debug(item.toString()))
                 .collect(Collectors.toList());
 
         Basket basket = new Basket(itemList);
         log.info(format("Basket create at %s contains %d item", basket.getCreated(), basket.getItemList().size()));
     }
 
-    private static SupplierProduct loadInventory() {
-        SupplierProduct supplierProduct = new SupplierProduct();
-        supplierProduct.loadInventory();
-        return supplierProduct;
+    private static Inventory getInventory() {
+        return new ProductInventory();
     }
+
+
 }

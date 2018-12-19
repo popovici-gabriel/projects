@@ -1,4 +1,4 @@
-package com.price.pricebasket;
+package com.price.pricebasket.domain;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.price.pricebasket;
+package com.price.pricebasket.domain;
 
 import java.util.Collections;
 import java.util.Date;

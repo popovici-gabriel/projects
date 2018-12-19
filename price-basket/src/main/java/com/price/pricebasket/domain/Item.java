@@ -1,4 +1,4 @@
-package com.price.pricebasket;
+package com.price.pricebasket.domain;
 
 
 import lombok.Builder;
@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class Item {
+
     private Product product;
 
     private Integer quantity;
