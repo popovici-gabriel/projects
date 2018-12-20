@@ -16,8 +16,11 @@ import static java.lang.String.format;
 @Slf4j
 public class PriceBasket {
 
-
     public static void main(String[] args) {
+        if (0 == args.length) {
+            throw new IllegalArgumentException("Error pricing goods. No items provided");
+        }
+
         final Inventory inventory = getInventory();
         inventory.loadDefaultInventory();
 
