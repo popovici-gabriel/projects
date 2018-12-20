@@ -2,12 +2,16 @@ package com.price.pricebasket.inventory;
 
 import com.price.pricebasket.domain.Item;
 import com.price.pricebasket.domain.Product;
+import com.price.pricebasket.domain.ReferenceItemDiscount;
+import com.price.pricebasket.domain.WeeklyPercentileDiscount;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.price.pricebasket.domain.WeeklyPercentileDiscount.currentMonday;
+import static com.price.pricebasket.domain.WeeklyPercentileDiscount.currentSunday;
 import static com.price.pricebasket.inventory.ItemIdentifier.*;
 
 public class ProductInventory implements Inventory {
@@ -28,7 +32,7 @@ public class ProductInventory implements Inventory {
 
     @Override
     public void loadDefaultInventory() {
-        addItem(soupItem());
+        addItem(soupItem(1));
         addItem(breadItem());
         addItem(milkItem());
         addItem(applesItem());
@@ -54,6 +58,7 @@ public class ProductInventory implements Inventory {
                         .id(APPLES.identifier())
                         .name(APPLES.identifier())
                         .build())
+                .discount(new WeeklyPercentileDiscount(0.1, currentMonday(), currentSunday()))
                 .build();
     }
 
@@ -80,14 +85,15 @@ public class ProductInventory implements Inventory {
                         .id(BREAD.identifier())
                         .name(BREAD.identifier())
                         .build())
+                .discount(new ReferenceItemDiscount(soupItem(2),0.5))
                 .build();
     }
 
-    static Item soupItem() {
+    static Item soupItem(int quantity) {
         return Item
                 .builder()
                 .price(BigDecimal.valueOf(0.65d))
-                .quantity(1)
+                .quantity(quantity)
                 .product(Product
                         .builder()
                         .id(SOUP.identifier())

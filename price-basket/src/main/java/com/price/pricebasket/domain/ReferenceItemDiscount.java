@@ -7,7 +7,10 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ReferenceItemDiscount implements Discount {
+
     private Item item;
+
+    private Double percentage;
 
     @Override
     public boolean isApplicable(Item item) {

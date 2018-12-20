@@ -16,4 +16,5 @@ public class Item {
 
     private BigDecimal price;
 
+    private Discount discount;
 }

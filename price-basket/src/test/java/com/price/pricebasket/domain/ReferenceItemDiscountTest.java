@@ -14,7 +14,7 @@ public class ReferenceItemDiscountTest {
     public void setUp() {
         referenceItem = Item
                 .builder()
-                .quantity(1)
+                .quantity(2)
                 .product(Product
                         .builder()
                         .id(ItemIdentifier.APPLES.identifier())
@@ -26,14 +26,14 @@ public class ReferenceItemDiscountTest {
     @Test
     @DisplayName("Should not be applicable for empty item")
     public void shouldNotBeApplicable() {
-        Assertions.assertFalse(new ReferenceItemDiscount(referenceItem).isApplicable(null));
+        Assertions.assertFalse(new ReferenceItemDiscount(referenceItem, 0.5).isApplicable(null));
     }
 
 
     @Test
     @DisplayName("Should be applicable for referenceItem")
     public void shouldBeApplicable() {
-        Assertions.assertTrue(new ReferenceItemDiscount(referenceItem).isApplicable(referenceItem));
+        Assertions.assertTrue(new ReferenceItemDiscount(referenceItem, 0.5).isApplicable(referenceItem));
     }
 
 }

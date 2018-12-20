@@ -27,15 +27,14 @@ public class PriceBasket {
         List<Item> itemList = Stream
                 .of(args)
                 .map(String::toLowerCase)
-                .peek(log::info)
+                .peek(log::debug)
                 .map(ItemIdentifier::itemIdentifier)
                 .peek(itemType -> log.debug(format("Found item type %s", itemType)))
                 .map(itemType -> inventory.getItem(itemType.identifier()))
                 .peek(item -> log.debug(item.toString()))
                 .collect(Collectors.toList());
 
-        Basket basket = new Basket(itemList);
-        log.info(format("Basket create at %s contains %d item", basket.getCreated(), basket.getItemList().size()));
+        new PriceCompute().compute(new Basket(itemList));
     }
 
     private static Inventory getInventory() {
