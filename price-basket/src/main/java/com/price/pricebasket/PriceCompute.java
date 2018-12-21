@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
 
 import static com.price.pricebasket.domain.Discount.defaultScale;
+import static com.price.pricebasket.domain.Discount.discount;
 import static java.math.BigDecimal.ZERO;
 import static java.util.Currency.getInstance;
 import static java.util.Locale.UK;
@@ -58,7 +59,10 @@ class PriceCompute {
                 .stream()
                 .map(item -> {
                     if (null != item.getDiscount() && item.getDiscount().isApplicable(item)) {
-                        log.info("{} {}% off:", item.getProduct().getName(), toInt(item.getDiscount().getPercentage()));
+                        log.info("{} {}% off: -{}", 
+                                item.getProduct().getName(), 
+                                toInt(item.getDiscount().getPercentage()),
+                                discount(item.getPrice(),BigDecimal.valueOf(item.getDiscount().getPercentage())));
                         return Discount.applyPercentage(item.getPrice(), BigDecimal.valueOf(item.getDiscount().getPercentage()));
                     }
                     return item.getPrice();
