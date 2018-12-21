@@ -1,6 +1,7 @@
 package com.price.pricebasket;
 
 import com.price.pricebasket.domain.Basket;
+import com.price.pricebasket.domain.Invoice;
 import com.price.pricebasket.domain.Item;
 import com.price.pricebasket.inventory.Inventory;
 import com.price.pricebasket.inventory.ItemIdentifier;
@@ -34,7 +35,7 @@ public class PriceBasket {
                 .peek(item -> log.debug(item.toString()))
                 .collect(Collectors.toList());
 
-        new PriceCompute().compute(new Basket(itemList));
+        new Invoice().generate(new Basket(itemList));
     }
 
     private static Inventory getInventory() {

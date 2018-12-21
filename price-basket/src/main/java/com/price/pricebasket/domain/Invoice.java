@@ -1,8 +1,5 @@
-package com.price.pricebasket;
+package com.price.pricebasket.domain;
 
-import com.price.pricebasket.domain.Basket;
-import com.price.pricebasket.domain.Discount;
-import com.price.pricebasket.domain.Item;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -15,7 +12,7 @@ import static java.util.Currency.getInstance;
 import static java.util.Locale.UK;
 
 @Slf4j
-class PriceCompute {
+public class Invoice {
 
     /**
      * Keeps track of how long the test has run.
@@ -42,12 +39,12 @@ class PriceCompute {
         executionTime = (System.nanoTime() - startTime) / 1_000_000;
     }
 
-    void compute(Basket basket) {
+    public void generate(Basket basket) {
         log.debug("Basket created at {}", basket.getCreated());
         startTiming();
         generateReport(basket);
         stopTiming();
-        log.debug("Took {} seconds to compute", executionTime);
+        log.debug("Took {} seconds to generate", executionTime);
     }
 
     private void generateReport(Basket basket) {
