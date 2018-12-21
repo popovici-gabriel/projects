@@ -32,6 +32,6 @@ public enum ItemIdentifier {
     public static ItemIdentifier itemIdentifier(String identifier) {
         return Optional
                 .ofNullable(ITEM_TYPE_LOOKUP.get(identifier))
-                .orElseThrow(() -> new IllegalArgumentException("Item not available in model"));
+                .orElseThrow(() -> new IllegalArgumentException("Item not available in inventory"));
     }
 }
