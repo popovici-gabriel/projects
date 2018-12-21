@@ -18,4 +18,6 @@ public interface Discount {
     }
 
     boolean isApplicable(Item item);
+    
+    Double getPercentage(); 
 }

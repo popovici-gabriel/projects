@@ -23,7 +23,7 @@ public class WeeklyPercentileDiscount implements Discount {
 
     @Override
     public boolean isApplicable(Item item) {
-        return 0 != percentage
+        return null != percentage
                 && null != item
                 && 0 != item.getQuantity()
                 && now().isAfter(monday)
@@ -37,5 +37,9 @@ public class WeeklyPercentileDiscount implements Discount {
 
     public static LocalDate currentSunday() {
         return now().with(nextOrSame(SUNDAY));
+    }
+
+    public Double getPercentage() {
+        return percentage;
     }
 }

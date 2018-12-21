@@ -18,4 +18,9 @@ public class ReferenceItemDiscount implements Discount {
                 && item != null
                 && this.item.getProduct().equals(item.getProduct());
     }
+
+    public Double getPercentage() {
+        return percentage;
+    }
+
 }

@@ -13,4 +13,9 @@ public class QuantityDiscount implements Discount {
     public boolean isApplicable(Item item) {
         return quantity != 0 && item != null && quantity == item.getQuantity();
     }
+
+    @Override
+    public Double getPercentage() {
+        return null;
+    }
 }
