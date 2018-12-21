@@ -67,9 +67,10 @@ class PriceCompute {
                 .stream()
                 .map(item -> {
                     if (null != item.getDiscount() && item.getDiscount().isApplicable(item)) {
-                        log.info("{} {}% off: -{}",
-                                item.getProduct().getName(),
+                        log.info("{} {}% off: -{}{}",
+                                capitalize(item.getProduct().getName()),
                                 toInt(item.getDiscount().getPercentage()),
+                                currencySymbol(),
                                 discount(item.getPrice(), BigDecimal.valueOf(item.getDiscount().getPercentage())));
                         return Discount.applyPercentage(item.getPrice(), BigDecimal.valueOf(item.getDiscount().getPercentage()));
                     }
@@ -101,5 +102,9 @@ class PriceCompute {
 
     private static Integer toInt(Double percentage) {
         return ((Double) (percentage * 100)).intValue();
+    }
+
+    private static String capitalize(String word) {
+        return Character.toUpperCase(word.charAt(0)) + word.substring(1);
     }
 }
