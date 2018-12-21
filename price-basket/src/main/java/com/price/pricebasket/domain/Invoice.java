@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import static com.price.pricebasket.domain.Discount.*;
 import static java.math.BigDecimal.ZERO;
+import static java.math.BigDecimal.valueOf;
 import static java.util.Currency.getInstance;
 import static java.util.Locale.UK;
 
@@ -66,10 +67,10 @@ public class Invoice {
                                 capitalize(item.getProduct().getName()),
                                 toInt(item.getDiscount().getPercentage()),
                                 currencySymbol(),
-                                discount(item.getPrice(), BigDecimal.valueOf(item.getDiscount().getPercentage())));
-                        return applyPercentage(item.getQuantity(), item.getPrice(), BigDecimal.valueOf(item.getDiscount().getPercentage()));
+                                discount(item.getPrice(), valueOf(item.getDiscount().getPercentage())));
+                        return applyPercentage(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage()));
                     }
-                    return item.getPrice();
+                    return itemPrice(item);
                 })
                 .reduce(ZERO, BigDecimal::add);
     }
@@ -79,7 +80,8 @@ public class Invoice {
                 .getItemList()
                 .stream()
                 .filter(item -> null != item.getPrice())
-                .map(Item::getPrice)
+                .filter(item -> null != item.getQuantity())
+                .map(Invoice::itemPrice)
                 .reduce(ZERO, BigDecimal::add);
     }
 
@@ -101,5 +103,9 @@ public class Invoice {
 
     private static String capitalize(String word) {
         return Character.toUpperCase(word.charAt(0)) + word.substring(1);
+    }
+
+    private static BigDecimal itemPrice(Item item) {
+        return defaultScale(item.getPrice().multiply(valueOf(item.getQuantity())));
     }
 }

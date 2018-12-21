@@ -1,8 +1,9 @@
 package com.price.pricebasket.domain;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.function.Function;
+
+import static java.math.RoundingMode.HALF_EVEN;
 
 
 public interface Discount {
@@ -20,7 +21,7 @@ public interface Discount {
     }
 
     static BigDecimal defaultScale(BigDecimal price) {
-        return price.setScale(2, RoundingMode.HALF_EVEN);
+        return price.setScale(2, HALF_EVEN);
     }
 
     boolean isApplicable(Item item);
