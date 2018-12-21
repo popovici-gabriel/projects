@@ -47,7 +47,7 @@ You can now run the application:
 <pre>
 java -jar target/PriceBasket-0.1-SNAPSHOT.jar Apple Milk Bread
 </pre>
-or pre defined script
+or predefined script running a couple of scenarios
 <pre>
 run.sh/run.cmd Unix/Windows
 </pre>
