@@ -49,5 +49,5 @@ java -jar target/PriceBasket-0.1-SNAPSHOT.jar Apple Milk Bread
 </pre>
 or pre defined script
 <pre>
-run.sh
+run.sh/run.cmd Unix/Windows
 </pre>
