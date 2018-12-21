@@ -5,8 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import static com.price.pricebasket.domain.Discount.defaultScale;
-import static com.price.pricebasket.domain.Discount.discount;
+import static com.price.pricebasket.domain.Discount.*;
 import static java.math.BigDecimal.ZERO;
 import static java.util.Currency.getInstance;
 import static java.util.Locale.UK;
@@ -28,7 +27,6 @@ public class Invoice {
      * Start timing the test run.
      */
     private static void startTiming() {
-        // Note the start time.
         startTime = System.nanoTime();
     }
 
@@ -69,7 +67,7 @@ public class Invoice {
                                 toInt(item.getDiscount().getPercentage()),
                                 currencySymbol(),
                                 discount(item.getPrice(), BigDecimal.valueOf(item.getDiscount().getPercentage())));
-                        return Discount.applyPercentage(item.getPrice(), BigDecimal.valueOf(item.getDiscount().getPercentage()));
+                        return applyPercentage(item.getQuantity(), item.getPrice(), BigDecimal.valueOf(item.getDiscount().getPercentage()));
                     }
                     return item.getPrice();
                 })
