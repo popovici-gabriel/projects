@@ -18,6 +18,12 @@ java -jar target/PriceBasket-0.1-SNAPSHOT.jar Milk Soup
 echo '------------------------------------------'
 echo '------------------------------------------'
 
+echo '--> About to run PriceBasket Apples Apples'
+java -jar target/PriceBasket-0.1-SNAPSHOT.jar Apples Apples
+
+echo '------------------------------------------'
+echo '------------------------------------------'
+
 echo '--> About to run PriceBasket Apples Milk Bread'
 java -jar target/PriceBasket-0.1-SNAPSHOT.jar Apples Milk Bread
 

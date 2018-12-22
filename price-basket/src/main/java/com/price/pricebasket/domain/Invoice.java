@@ -59,7 +59,7 @@ public class Invoice {
 
     private BigDecimal total(Basket basket) {
         return basket
-                .getItemList()
+                .getItems()
                 .stream()
                 .map(item -> {
                     if (null != item.getDiscount() && item.getDiscount().isApplicable(item)) {
@@ -67,8 +67,8 @@ public class Invoice {
                                 capitalize(item.getProduct().getName()),
                                 toInt(item.getDiscount().getPercentage()),
                                 currencySymbol(),
-                                discount(item.getPrice(), valueOf(item.getDiscount().getPercentage())));
-                        return applyPercentage(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage()));
+                                totalDiscount(item.getQuantity(),item.getPrice(), valueOf(item.getDiscount().getPercentage())));
+                        return apply(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage()));
                     }
                     return itemPrice(item);
                 })
@@ -77,7 +77,7 @@ public class Invoice {
 
     private BigDecimal subTotal(Basket basket) {
         return basket
-                .getItemList()
+                .getItems()
                 .stream()
                 .filter(item -> null != item.getPrice())
                 .filter(item -> null != item.getQuantity())
@@ -87,7 +87,7 @@ public class Invoice {
 
     private boolean hasNoDeals(Basket basket) {
         return basket
-                .getItemList()
+                .getItems()
                 .stream()
                 .map(Item::getDiscount)
                 .allMatch(Objects::isNull);

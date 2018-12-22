@@ -2,25 +2,25 @@ package com.price.pricebasket.domain;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Basket {
 
-    private final List<Item> itemList;
+    private final Set<Item> items;
     private final Date created;
 
-    public Basket(List<Item> itemList) {
-        this.itemList = itemList;
+    public Basket(Set<Item> items) {
+        this.items = items;
         this.created = new Date();
     }
 
     public Basket() {
-        this(new LinkedList<>());
+        this(new HashSet<>());
     }
 
-    public List<Item> getItemList() {
-        return Collections.unmodifiableList(itemList);
+    public Set<Item> getItems() {
+        return Collections.unmodifiableSet(items);
     }
 
     public Date getCreated() {

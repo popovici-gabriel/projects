@@ -3,6 +3,7 @@ package com.price.pricebasket.domain;
 import java.math.BigDecimal;
 import java.util.function.Function;
 
+import static java.math.BigDecimal.valueOf;
 import static java.math.RoundingMode.HALF_EVEN;
 
 
@@ -10,14 +11,21 @@ public interface Discount {
 
 
     Function<Integer, Function<BigDecimal, Function<BigDecimal, BigDecimal>>> TOTAL_PRICE_FUNCTION =
-            quantity -> price -> percentage -> price.multiply(new BigDecimal(quantity)).subtract(discount(price, percentage));
+            quantity -> price -> percentage -> totalAmount(valueOf(quantity), price, percentage);
 
-    static BigDecimal applyPercentage(Integer quantity, BigDecimal price, BigDecimal percentage) {
+    static BigDecimal apply(Integer quantity, BigDecimal price, BigDecimal percentage) {
         return defaultScale(TOTAL_PRICE_FUNCTION.apply(quantity).apply(price).apply(percentage));
     }
 
-    static BigDecimal discount(BigDecimal price, BigDecimal percentage) {
-        return defaultScale(price.multiply(percentage));
+    static BigDecimal totalDiscount(Integer quantity, BigDecimal price, BigDecimal percentage) {
+        return defaultScale(valueOf(quantity).multiply(price).multiply(percentage));
+    }
+
+    static BigDecimal totalAmount(BigDecimal quantity, BigDecimal unitPrice, BigDecimal discountRate) {
+        BigDecimal amount = quantity.multiply(unitPrice);
+        BigDecimal discount = amount.multiply(discountRate);
+        BigDecimal discountedAmount = amount.subtract(discount);
+        return defaultScale(discountedAmount);
     }
 
     static BigDecimal defaultScale(BigDecimal price) {
