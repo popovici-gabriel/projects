@@ -48,7 +48,7 @@ public class ProductInventory implements Inventory {
         return itemInventory.size();
     }
 
-    static Item applesItem() {
+    public static Item applesItem() {
         return Item
                 .builder()
                 .price(BigDecimal.ONE)

@@ -57,7 +57,7 @@ public class Invoice {
         log.info("Total: {}{}", currencySymbol(), defaultScale(total));
     }
 
-    private BigDecimal total(Basket basket) {
+    BigDecimal total(Basket basket) {
         return basket
                 .getItems()
                 .stream()
@@ -75,7 +75,7 @@ public class Invoice {
                 .reduce(ZERO, BigDecimal::add);
     }
 
-    private BigDecimal subTotal(Basket basket) {
+    BigDecimal subTotal(Basket basket) {
         return basket
                 .getItems()
                 .stream()
@@ -85,7 +85,7 @@ public class Invoice {
                 .reduce(ZERO, BigDecimal::add);
     }
 
-    private boolean hasNoDeals(Basket basket) {
+    boolean hasNoDeals(Basket basket) {
         return basket
                 .getItems()
                 .stream()
