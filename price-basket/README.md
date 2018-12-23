@@ -62,3 +62,22 @@ Entry point is the PriceBasket class which calls
 </pre>
 
 ![Price Basket](Price-Diagram.jpg)
+
+
+Assumptions
+-----------
+
+Given CLI items exists in the product inventory which can be easily created programatically/warmed up during bootstrap:
+<pre>
+            Item
+                .builder()
+                .price(BigDecimal.ONE)
+                .quantity(1)
+                .product(Product
+                        .builder()
+                        .id(APPLES.identifier())
+                        .name(APPLES.identifier())
+                        .build())
+                .discount(new WeeklyPercentileDiscount(0.1, currentMonday(), currentSunday()))
+                .build();
+</pre>
