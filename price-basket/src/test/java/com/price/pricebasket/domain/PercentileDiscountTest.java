@@ -18,4 +18,9 @@ public class PercentileDiscountTest {
     public void shouldBeApplicable() {
         Assertions.assertTrue(new PercentileDiscount(0.25d).isApplicable(Item.builder().quantity(1).build()));
     }
+
+    @Test
+    public void shouldNotReferenceOtherItems() {
+        Assertions.assertFalse(new PercentileDiscount(0.25d).referencesAdditionalItems());
+    }
 }

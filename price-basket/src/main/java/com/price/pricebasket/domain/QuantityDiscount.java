@@ -3,6 +3,10 @@ package com.price.pricebasket.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.Optional;
+
+import static java.util.Optional.empty;
+
 @Data
 @AllArgsConstructor
 public class QuantityDiscount implements Discount {
@@ -17,5 +21,10 @@ public class QuantityDiscount implements Discount {
     @Override
     public Double getPercentage() {
         return null;
+    }
+
+    @Override
+    public Optional<Item> getItem() {
+        return empty();
     }
 }

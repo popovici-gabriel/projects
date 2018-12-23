@@ -1,5 +1,6 @@
 package com.price.pricebasket.domain;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +22,11 @@ public class WeeklyPercentileDiscountTest {
     @DisplayName("Should be applicable for item")
     public void shouldBeApplicable() {
         assertTrue(new WeeklyPercentileDiscount(0.1, currentMonday(), currentSunday()).isApplicable(Item.builder().quantity(1).build()));
+    }
+
+    @Test
+    public void shouldNotReferenceOtherItems() {
+        Assertions.assertFalse(new WeeklyPercentileDiscount(0.1, currentMonday(), currentMonday()).referencesAdditionalItems());
     }
 
 }

@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
 import static java.time.LocalDate.now;
 import static java.time.temporal.TemporalAdjusters.nextOrSame;
 import static java.time.temporal.TemporalAdjusters.previousOrSame;
+import static java.util.Optional.empty;
 
 @Data
 @AllArgsConstructor
@@ -26,8 +28,7 @@ public class WeeklyPercentileDiscount implements Discount {
         return null != percentage
                 && null != item
                 && 0 != item.getQuantity()
-                && now().isAfter(monday)
-                && now().isBefore(sunday);
+                && (now().isAfter(monday) || now().isBefore(sunday));
     }
 
 
@@ -42,4 +43,9 @@ public class WeeklyPercentileDiscount implements Discount {
     public Double getPercentage() {
         return percentage;
     }
+
+    public Optional<Item> getItem() {
+        return empty();
+    }
+
 }

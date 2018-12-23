@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.price.pricebasket.domain.Discount.*;
 import static java.math.BigDecimal.ZERO;
@@ -62,6 +63,28 @@ public class Invoice {
                 .getItems()
                 .stream()
                 .map(item -> {
+                    if (item.getDiscount().referencesAdditionalItems()) {
+                        item
+                                .getDiscount()
+                                .getItem()
+                                .map(discountItem -> {
+                                    return findByProductId(basket, discountItem.getProduct().getId())
+                                            .map(referencedItem -> {
+                                                if (item.getQuantity().equals(referencedItem.getQuantity())) {
+                                                    log.info("{} {}% off: -{}{}",
+                                                            capitalize(item.getProduct().getName()),
+                                                            toInt(item.getDiscount().getPercentage()),
+                                                            currencySymbol(),
+                                                            totalDiscount(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage())));
+                                                    return apply(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage()));
+                                                }
+                                                return valueOf(0.0);
+                                            })
+                                            .orElseGet(() -> valueOf(0.0));
+                                })
+                                .orElseGet(() -> valueOf(0.0));
+                    }
+
                     if (hasDiscountAndApplicableForItem(item)) {
                         log.info("{} {}% off: -{}{}",
                                 capitalize(item.getProduct().getName()),
@@ -70,6 +93,7 @@ public class Invoice {
                                 totalDiscount(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage())));
                         return apply(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage()));
                     }
+
                     return itemPrice(item);
                 })
                 .reduce(ZERO, BigDecimal::add);
@@ -91,6 +115,14 @@ public class Invoice {
                 .stream()
                 .map(Item::getDiscount)
                 .allMatch(Objects::isNull);
+    }
+
+    Optional<Item> findByProductId(Basket basket, String ID) {
+        return basket
+                .getItems()
+                .stream()
+                .filter(item -> item.getProduct().getId().equals(ID))
+                .findFirst();
     }
 
     private boolean hasDiscountAndApplicableForItem(Item item) {

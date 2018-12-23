@@ -20,5 +20,10 @@ public class QuantityDiscountTest {
         Assertions.assertTrue(new QuantityDiscount(1).isApplicable(Item.builder().quantity(1).build()));
     }
 
+    @Test
+    public void shouldNotReferenceOtherItems() {
+        Assertions.assertFalse(new QuantityDiscount(1).referencesAdditionalItems());
+    }
+
 
 }

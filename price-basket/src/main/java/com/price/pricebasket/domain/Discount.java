@@ -1,6 +1,7 @@
 package com.price.pricebasket.domain;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.function.Function;
 
 import static java.math.BigDecimal.valueOf;
@@ -35,4 +36,10 @@ public interface Discount {
     boolean isApplicable(Item item);
 
     Double getPercentage();
+
+    default boolean referencesAdditionalItems() {
+        return false;
+    }
+
+    Optional<Item> getItem();
 }
