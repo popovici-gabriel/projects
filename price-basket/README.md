@@ -51,3 +51,14 @@ or predefined script running a couple of scenarios
 <pre>
 run.sh/run.cmd Unix/Windows
 </pre>
+
+Diagram
+-------
+UML Diagram/Modules
+
+Entry point is the PriceBasket class which calls
+<pre>
+ new Invoice().generate(new Basket(items));
+</pre>
+
+![Price Basket](Price-Diagram.jpg)
