@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ReferenceItemDiscount implements Discount {
+public class SameItemDiscount implements Discount {
 
     private Item item;
 

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class ReferenceItemDiscountTest {
+public class SameItemDiscountTest {
 
     Item referenceItem;
 
@@ -26,14 +26,14 @@ public class ReferenceItemDiscountTest {
     @Test
     @DisplayName("Should not be applicable for empty item")
     public void shouldNotBeApplicable() {
-        Assertions.assertFalse(new ReferenceItemDiscount(referenceItem, 0.5).isApplicable(null));
+        Assertions.assertFalse(new SameItemDiscount(referenceItem, 0.5).isApplicable(null));
     }
 
 
     @Test
     @DisplayName("Should be applicable for referenceItem")
     public void shouldBeApplicable() {
-        Assertions.assertTrue(new ReferenceItemDiscount(referenceItem, 0.5).isApplicable(referenceItem));
+        Assertions.assertTrue(new SameItemDiscount(referenceItem, 0.5).isApplicable(referenceItem));
     }
 
 }

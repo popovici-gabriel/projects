@@ -2,7 +2,7 @@ package com.price.pricebasket.inventory;
 
 import com.price.pricebasket.domain.Item;
 import com.price.pricebasket.domain.Product;
-import com.price.pricebasket.domain.ReferenceItemDiscount;
+import com.price.pricebasket.domain.SameItemDiscount;
 import com.price.pricebasket.domain.WeeklyPercentileDiscount;
 
 import java.math.BigDecimal;
@@ -85,7 +85,7 @@ public class ProductInventory implements Inventory {
                         .id(BREAD.identifier())
                         .name(BREAD.identifier())
                         .build())
-                .discount(new ReferenceItemDiscount(soupItem(2),0.5))
+                .discount(new SameItemDiscount(soupItem(2),0.5))
                 .build();
     }
 
