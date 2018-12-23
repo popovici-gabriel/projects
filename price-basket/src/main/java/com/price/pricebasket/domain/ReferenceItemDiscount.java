@@ -14,7 +14,9 @@ public class ReferenceItemDiscount implements Discount {
 
     @Override
     public boolean isApplicable(Item item) {
-        return this.item != null && item != null;
+        return this.item != null
+                && item != null
+                && this.item.getProduct().equals(item.getProduct());
     }
 
     public Double getPercentage() {

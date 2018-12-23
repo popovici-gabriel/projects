@@ -62,12 +62,12 @@ public class Invoice {
                 .getItems()
                 .stream()
                 .map(item -> {
-                    if (null != item.getDiscount() && item.getDiscount().isApplicable(item)) {
+                    if (hasDiscountAndApplicableForItem(item)) {
                         log.info("{} {}% off: -{}{}",
                                 capitalize(item.getProduct().getName()),
                                 toInt(item.getDiscount().getPercentage()),
                                 currencySymbol(),
-                                totalDiscount(item.getQuantity(),item.getPrice(), valueOf(item.getDiscount().getPercentage())));
+                                totalDiscount(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage())));
                         return apply(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage()));
                     }
                     return itemPrice(item);
@@ -91,6 +91,10 @@ public class Invoice {
                 .stream()
                 .map(Item::getDiscount)
                 .allMatch(Objects::isNull);
+    }
+
+    private boolean hasDiscountAndApplicableForItem(Item item) {
+        return null != item.getDiscount() && item.getDiscount().isApplicable(item);
     }
 
     private static String currencySymbol() {
