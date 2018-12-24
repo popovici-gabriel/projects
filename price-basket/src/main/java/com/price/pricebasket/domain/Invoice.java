@@ -66,7 +66,7 @@ public class Invoice {
                 .getItems()
                 .stream()
                 .map(item -> {
-                    if (hasPromotionDiscount(item)) {
+                    if (hasApplicablePromotionDiscount(item)) {
                         return item
                                 .getDiscount()
                                 .getItem()
@@ -88,7 +88,7 @@ public class Invoice {
                                 .orElseGet(() -> priceItem(item));
                     }
 
-                    if (hasDiscountAndApplicableForItem(item)) {
+                    if (hasApplicableDiscount(item)) {
                         log.info("{} {}% off: -{}{}",
                                 capitalize(item.getProduct().getName()),
                                 toInt(item.getDiscount().getPercentage()),
@@ -130,11 +130,11 @@ public class Invoice {
     }
 
 
-    private boolean hasPromotionDiscount(Item item) {
-        return null != item.getDiscount() && item.getDiscount().hasPromotions();
+    private boolean hasApplicablePromotionDiscount(Item item) {
+        return null != item.getDiscount() && item.getDiscount().hasPromotions() && item.getDiscount().isApplicable(item);
     }
 
-    private boolean hasDiscountAndApplicableForItem(Item item) {
+    private boolean hasApplicableDiscount(Item item) {
         return null != item.getDiscount() && item.getDiscount().isApplicable(item);
     }
 
