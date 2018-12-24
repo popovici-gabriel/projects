@@ -73,13 +73,8 @@ public class Invoice {
                                 .map(discountItem ->
                                         findByProductId(basket, discountItem.getProduct().getId())
                                                 .map(referencedItem -> {
-                                                    if (item.getQuantity().equals(referencedItem.getQuantity())) {
-                                                        log.info("{} {}% off: -{}{}",
-                                                                capitalize(item.getProduct().getName()),
-                                                                toInt(item.getDiscount().getPercentage()),
-                                                                currencySymbol(),
-                                                                totalDiscount(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage())));
-                                                        return apply(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage()));
+                                                    if (referencedItem.getQuantity().equals(discountItem.getQuantity())) {
+                                                        return calculateAndPrintDiscount(item);
                                                     }
                                                     return priceItem(item);
                                                 })
@@ -101,6 +96,15 @@ public class Invoice {
                 })
                 .peek(total -> log.debug("Collected value:{}", total))
                 .reduce(ZERO, BigDecimal::add);
+    }
+
+    private BigDecimal calculateAndPrintDiscount(Item item) {
+        log.info("{} {}% off: -{}{}",
+                capitalize(item.getProduct().getName()),
+                toInt(item.getDiscount().getPercentage()),
+                currencySymbol(),
+                totalDiscount(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage())));
+        return apply(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage()));
     }
 
     BigDecimal subTotal(Basket basket) {
@@ -131,11 +135,14 @@ public class Invoice {
 
 
     private boolean hasApplicablePromotionDiscount(Item item) {
-        return null != item.getDiscount() && item.getDiscount().hasPromotions() && item.getDiscount().isApplicable(item);
+        return null != item.getDiscount()
+                && item.getDiscount().hasPromotions()
+                && item.getDiscount().isApplicable(item);
     }
 
     private boolean hasApplicableDiscount(Item item) {
-        return null != item.getDiscount() && item.getDiscount().isApplicable(item);
+        return null != item.getDiscount()
+                && item.getDiscount().isApplicable(item);
     }
 
     private static String currencySymbol() {
