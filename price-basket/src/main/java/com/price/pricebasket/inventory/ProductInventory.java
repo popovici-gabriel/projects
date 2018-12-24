@@ -10,8 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.price.pricebasket.domain.WeeklyPercentileDiscount.currentMonday;
 import static com.price.pricebasket.domain.WeeklyPercentileDiscount.currentSunday;
+import static com.price.pricebasket.domain.WeeklyPercentileDiscount.previousMonday;
 import static com.price.pricebasket.inventory.ItemIdentifier.*;
 
 public class ProductInventory implements Inventory {
@@ -58,7 +58,7 @@ public class ProductInventory implements Inventory {
                         .id(APPLES.identifier())
                         .name(APPLES.identifier())
                         .build())
-                .discount(new WeeklyPercentileDiscount(0.1, currentMonday(), currentSunday()))
+                .discount(new WeeklyPercentileDiscount(0.1, previousMonday(), currentSunday()))
                 .build();
     }
 

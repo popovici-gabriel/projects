@@ -1,29 +1,31 @@
-echo '--> About to run PriceBasket'
+@echo off
+
+echo "--> About to run PriceBasket"
 java -jar target/PriceBasket-0.1-SNAPSHOT.jar
 
-echo '------------------------------------------'
-echo '------------------------------------------'
+echo "------------------------------------------"
+echo "------------------------------------------"
 
-echo '--> About to run PriceBasket Ferrari'
+echo "--> About to run PriceBasket Ferrari"
 java -jar target/PriceBasket-0.1-SNAPSHOT.jar Ferrari
 
-echo '------------------------------------------'
-echo '------------------------------------------'
+echo "------------------------------------------"
+echo "------------------------------------------"
 
-echo '--> About to run PriceBasket Milk Soup'
+echo "--> About to run PriceBasket Milk Soup"
 java -jar target/PriceBasket-0.1-SNAPSHOT.jar Milk Soup
 
-echo '------------------------------------------'
-echo '------------------------------------------'
+echo "------------------------------------------"
+echo "------------------------------------------"
 
-echo '--> About to run PriceBasket Apples Apples'
+echo "--> About to run PriceBasket Apples Apples"
 java -jar target/PriceBasket-0.1-SNAPSHOT.jar Apples Apples
 
-echo '------------------------------------------'
-echo '------------------------------------------'
+echo "------------------------------------------"
+echo "------------------------------------------"
 
-echo '--> About to run PriceBasket Apples Milk Bread'
+echo "--> About to run PriceBasket Apples Milk Bread"
 java -jar target/PriceBasket-0.1-SNAPSHOT.jar Apples Milk Bread
 
-echo '------------------------------------------'
-echo '----------------THE END-------------------'
+echo "------------------------------------------"
+echo "----------------THE END-------------------"
