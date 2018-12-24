@@ -6,7 +6,10 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.price.pricebasket.domain.Discount.*;
+import static com.price.pricebasket.domain.Discount.apply;
+import static com.price.pricebasket.domain.Discount.defaultScale;
+import static com.price.pricebasket.domain.Discount.totalDiscount;
+import static java.lang.Character.toUpperCase;
 import static java.math.BigDecimal.ZERO;
 import static java.math.BigDecimal.valueOf;
 import static java.util.Currency.getInstance;
@@ -63,26 +66,26 @@ public class Invoice {
                 .getItems()
                 .stream()
                 .map(item -> {
-                    if (item.getDiscount().referencesAdditionalItems()) {
-                        item
+                    if (hasPromotionDiscount(item)) {
+                        return item
                                 .getDiscount()
                                 .getItem()
-                                .map(discountItem -> {
-                                    return findByProductId(basket, discountItem.getProduct().getId())
-                                            .map(referencedItem -> {
-                                                if (item.getQuantity().equals(referencedItem.getQuantity())) {
-                                                    log.info("{} {}% off: -{}{}",
-                                                            capitalize(item.getProduct().getName()),
-                                                            toInt(item.getDiscount().getPercentage()),
-                                                            currencySymbol(),
-                                                            totalDiscount(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage())));
-                                                    return apply(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage()));
-                                                }
-                                                return valueOf(0.0);
-                                            })
-                                            .orElseGet(() -> valueOf(0.0));
-                                })
-                                .orElseGet(() -> valueOf(0.0));
+                                .map(discountItem ->
+                                        findByProductId(basket, discountItem.getProduct().getId())
+                                                .map(referencedItem -> {
+                                                    if (item.getQuantity().equals(referencedItem.getQuantity())) {
+                                                        log.info("{} {}% off: -{}{}",
+                                                                capitalize(item.getProduct().getName()),
+                                                                toInt(item.getDiscount().getPercentage()),
+                                                                currencySymbol(),
+                                                                totalDiscount(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage())));
+                                                        return apply(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage()));
+                                                    }
+                                                    return priceItem(item);
+                                                })
+                                                .orElseGet(() -> priceItem(item))
+                                )
+                                .orElseGet(() -> priceItem(item));
                     }
 
                     if (hasDiscountAndApplicableForItem(item)) {
@@ -94,8 +97,9 @@ public class Invoice {
                         return apply(item.getQuantity(), item.getPrice(), valueOf(item.getDiscount().getPercentage()));
                     }
 
-                    return itemPrice(item);
+                    return priceItem(item);
                 })
+                .peek(total -> log.debug("Collected value:{}", total))
                 .reduce(ZERO, BigDecimal::add);
     }
 
@@ -105,7 +109,7 @@ public class Invoice {
                 .stream()
                 .filter(item -> null != item.getPrice())
                 .filter(item -> null != item.getQuantity())
-                .map(Invoice::itemPrice)
+                .map(Invoice::priceItem)
                 .reduce(ZERO, BigDecimal::add);
     }
 
@@ -117,12 +121,17 @@ public class Invoice {
                 .allMatch(Objects::isNull);
     }
 
-    Optional<Item> findByProductId(Basket basket, String ID) {
+    Optional<Item> findByProductId(Basket basket, String id) {
         return basket
                 .getItems()
                 .stream()
-                .filter(item -> item.getProduct().getId().equals(ID))
+                .filter(item -> item.getProduct().getId().equals(id))
                 .findFirst();
+    }
+
+
+    private boolean hasPromotionDiscount(Item item) {
+        return null != item.getDiscount() && item.getDiscount().hasPromotions();
     }
 
     private boolean hasDiscountAndApplicableForItem(Item item) {
@@ -138,10 +147,10 @@ public class Invoice {
     }
 
     private static String capitalize(String word) {
-        return Character.toUpperCase(word.charAt(0)) + word.substring(1);
+        return toUpperCase(word.charAt(0)) + word.substring(1);
     }
 
-    private static BigDecimal itemPrice(Item item) {
+    private static BigDecimal priceItem(Item item) {
         return defaultScale(item.getPrice().multiply(valueOf(item.getQuantity())));
     }
 }

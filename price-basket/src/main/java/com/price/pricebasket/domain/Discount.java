@@ -37,7 +37,7 @@ public interface Discount {
 
     Double getPercentage();
 
-    default boolean referencesAdditionalItems() {
+    default boolean hasPromotions() {
         return false;
     }
 

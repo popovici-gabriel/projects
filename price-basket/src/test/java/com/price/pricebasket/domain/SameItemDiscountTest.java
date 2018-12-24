@@ -38,7 +38,7 @@ public class SameItemDiscountTest {
 
     @Test
     public void shouldNotReferenceOtherItems() {
-        Assertions.assertFalse(new SameItemDiscount(referenceItem, 0.5).referencesAdditionalItems());
+        Assertions.assertFalse(new SameItemDiscount(referenceItem, 0.5).hasPromotions());
     }
 
 }

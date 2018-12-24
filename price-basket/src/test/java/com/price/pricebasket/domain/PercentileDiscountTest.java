@@ -21,6 +21,6 @@ public class PercentileDiscountTest {
 
     @Test
     public void shouldNotReferenceOtherItems() {
-        Assertions.assertFalse(new PercentileDiscount(0.25d).referencesAdditionalItems());
+        Assertions.assertFalse(new PercentileDiscount(0.25d).hasPromotions());
     }
 }

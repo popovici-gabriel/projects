@@ -2,7 +2,7 @@ package com.price.pricebasket.inventory;
 
 import com.price.pricebasket.domain.Item;
 import com.price.pricebasket.domain.Product;
-import com.price.pricebasket.domain.SameItemDiscount;
+import com.price.pricebasket.domain.PromotionDiscount;
 import com.price.pricebasket.domain.WeeklyPercentileDiscount;
 
 import java.math.BigDecimal;
@@ -12,7 +12,10 @@ import java.util.Optional;
 
 import static com.price.pricebasket.domain.WeeklyPercentileDiscount.currentSunday;
 import static com.price.pricebasket.domain.WeeklyPercentileDiscount.previousMonday;
-import static com.price.pricebasket.inventory.ItemIdentifier.*;
+import static com.price.pricebasket.inventory.ItemIdentifier.APPLES;
+import static com.price.pricebasket.inventory.ItemIdentifier.BREAD;
+import static com.price.pricebasket.inventory.ItemIdentifier.MILK;
+import static com.price.pricebasket.inventory.ItemIdentifier.SOUP;
 
 public class ProductInventory implements Inventory {
 
@@ -85,7 +88,7 @@ public class ProductInventory implements Inventory {
                         .id(BREAD.identifier())
                         .name(BREAD.identifier())
                         .build())
-                .discount(new SameItemDiscount(soupItem(2),0.5))
+                .discount(new PromotionDiscount(soupItem(2), 0.5))
                 .build();
     }
 

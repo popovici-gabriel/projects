@@ -22,7 +22,7 @@ public class QuantityDiscountTest {
 
     @Test
     public void shouldNotReferenceOtherItems() {
-        Assertions.assertFalse(new QuantityDiscount(1).referencesAdditionalItems());
+        Assertions.assertFalse(new QuantityDiscount(1).hasPromotions());
     }
 
 
