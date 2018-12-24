@@ -27,7 +27,7 @@ public class WeeklyPercentileDiscountTest {
 
     @Test
     public void shouldNotReferenceOtherItems() {
-        Assertions.assertFalse(new WeeklyPercentileDiscount(0.1, currentMonday(), currentMonday()).referencesAdditionalItems());
+        Assertions.assertFalse(new WeeklyPercentileDiscount(0.1, previousSunday(), currentSunday()).referencesAdditionalItems());
     }
 
 }

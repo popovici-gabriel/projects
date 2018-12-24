@@ -26,18 +26,6 @@ public class WeeklyPercentileDiscount implements Discount {
     private LocalDate sunday;
 
 
-    public static LocalDate previousMonday() {
-        return now().with(previousOrSame(MONDAY));
-    }
-
-    public static LocalDate previousSunday() {
-        return now().with(previousOrSame(SUNDAY));
-    }
-
-    public static LocalDate currentSunday() {
-        return now().with(nextOrSame(SUNDAY));
-    }
-
     @Override
     public boolean isApplicable(Item item) {
         return (null != percentage)
@@ -49,9 +37,21 @@ public class WeeklyPercentileDiscount implements Discount {
     public Double getPercentage() {
         return percentage;
     }
-
+    
     public Optional<Item> getItem() {
         return empty();
+    }
+
+    public static LocalDate previousMonday() {
+        return now().with(previousOrSame(MONDAY));
+    }
+
+    public static LocalDate previousSunday() {
+        return now().with(previousOrSame(SUNDAY));
+    }
+
+    public static LocalDate currentSunday() {
+        return now().with(nextOrSame(SUNDAY));
     }
 
 }
