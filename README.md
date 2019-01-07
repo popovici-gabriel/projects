@@ -15,6 +15,6 @@ Following projects
 - c++ client for Hadoop 1.x 
 - 2015 @JPMorgan AM CCA Resource Schedulder under ResourceScheduler folder
 - 2018 @JPMorgan Coding Exercise under coding-popovici
-- 2018 BJSS Coding Exercise under price-baskket also available at https://gitlab.com/popovici.gabriel/price-basket.git  
+- 2018 BJSS Coding Exercise under price-basket (also available at https://gitlab.com/popovici.gabriel/price-basket.git)  
 - RXJava samples under rx-samples/docs presentation held @JPMorgan Chase, CIB, Prime Prokerage
  Public audience 
