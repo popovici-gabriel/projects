@@ -1,11 +1,11 @@
 Projects
 ========
 
-Gabriel Popovici 
-Email: popovici.gabriel@gmail.com
-Linkedin: https://www.linkedin.com/profile/preview?vpa=pub&locale=
-Resume under folder /profile 
-Education files under profile/Education
+Gabriel Popovici <br/> 
+Email: popovici.gabriel@gmail.com <br/>
+Linkedin: https://www.linkedin.com/profile/preview?vpa=pub&locale= <br/>
+Resume under folder /profile <br/>
+Education files under profile/Education <br/>
 
 Following projects
 ------------------
