@@ -18,3 +18,4 @@ Following projects
 - 2018 BJSS Coding Exercise under price-basket (also available at https://gitlab.com/popovici.gabriel/price-basket.git)  
 - RXJava samples under rx-samples/docs presentation held @JPMorgan Chase, CIB, Prime Prokerage
  Public audience 
+- presentation folder on various subjects 
